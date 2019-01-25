@@ -60,8 +60,8 @@ public class CustomView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int width = getMySize(100, widthMeasureSpec);
-        int height = getMySize(100, heightMeasureSpec);
+        int width = getMySize(mDefaultSize, widthMeasureSpec);
+        int height = getMySize(mDefaultSize, heightMeasureSpec);
 
         if (width < height) {
             height = width;
