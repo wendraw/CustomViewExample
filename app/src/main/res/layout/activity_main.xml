@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg"
     tools:context=".MainActivity">
 
-    <!--<com.wendraw.customviewexample.CustomViewLayout
+   <!-- <com.wendraw.customviewexample.CustomViewLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#0f0">
@@ -31,20 +32,20 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="100dp" />-->
+        android:layout_height="100dp" />
 
     <com.wendraw.customviewexample.CustomView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#f00"
-        app:default_size="100dp" />
+        app:default_size="100dp" />-->
 
-    <!--<com.wendraw.customviewexample.MiClockView
+    <com.wendraw.customviewexample.MiClockView
         android:layout_width="380dp"
         android:layout_height="380dp"
         android:layout_centerInParent="true"
         app:clock_backgroundColor="@color/bg"
         app:clock_darkColor="#80ffffff"
-        app:clock_lightColor="#fff" />-->
+        app:clock_lightColor="#fff" />
 
-</LinearLayout>
+</RelativeLayout>

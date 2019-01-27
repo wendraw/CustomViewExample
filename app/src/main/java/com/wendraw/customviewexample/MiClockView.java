@@ -157,7 +157,7 @@ public class MiClockView extends View {
         drawHourHand();
         drawMinuteHand();
         drawSecondHand();
-        //重绘当前的画布，会重新读取时间
+        //重绘当前的 View，最后会循环调用 onDraw 方法，从而达到时钟转动的效果
         invalidate();
     }
 
@@ -225,15 +225,6 @@ public class MiClockView extends View {
         for (int i = 0; i < 4; i++) {
             mCanvas.drawArc(mCircleRectF, 5 + 90 * i, 80, false, mCirclePaint);
         }
-        /*mCanvas.drawLine(0, getHeight() / 2f, getWidth(), getHeight() / 2f, mCirclePaint);
-        mCanvas.drawLine(getWidth() / 2f, 0, getWidth() / 2f, getHeight(), mCirclePaint);
-        mCanvas.drawRect(mCircleRectF, mCirclePaint);
-
-        mTextPaint.setTextSize(200);
-        Rect rect = new Rect();
-        mTextPaint.getTextBounds("1234", 0, "1234".length(), rect);
-        mCanvas.drawText("1234", getWidth() / 2f, getHeight() / 2f +
-                rect.height() / 2f - mCircleStrokeWidth / 2, mTextPaint);*/
     }
 
     /**
@@ -252,10 +243,12 @@ public class MiClockView extends View {
         //matrix默认会在三点钟方向开始颜色的渐变，为了吻合钟表十二点钟顺时针旋转的方向，把秒针旋转的角度减去90度
         mGradientMatrix.setRotate(mSecondDegree - 90, getWidth() / 2f, getHeight() / 2f);
         mSweepGradient.setLocalMatrix(mGradientMatrix);
+        //画笔设置着色器，类似雷达的扫描效果
         mScaleArcPaint.setShader(mSweepGradient);
+        //根据外接矩形绘制圆环
         mCanvas.drawArc(mScaleArcRectF, 0, 360, false, mScaleArcPaint);
 
-        //画背景刻度线
+        //画背刻度线，颜色与背景一样，会与圆环重合
         for (int i = 0; i < 200; i++) {
             mCanvas.drawLine(getWidth() / 2f, mPaddingTop + mScaleLineLen + mTextRect.height() / 2f,
                     getWidth() / 2f, mPaddingTop + mScaleLineLen * 2 + mTextRect.height() / 2f,
@@ -271,11 +264,14 @@ public class MiClockView extends View {
      */
     private void getCurrentTime() {
         Calendar calendar = Calendar.getInstance();
+
+        //计算出当前的时、分、秒，并且精确到小数点
         float milliSecond = calendar.get(Calendar.MILLISECOND);
         float second = calendar.get(Calendar.SECOND) + milliSecond / 1000;
         float minute = calendar.get(Calendar.MINUTE) + second / 60;
         float hour = calendar.get(Calendar.HOUR) + minute / 60;
 
+        //根据时、分、秒计算出当前指针的位置
         mSecondDegree = second / 60 * 360;
         mMinuteDegree = minute / 60 * 360;
         mHourDegree = hour / 12 * 360;
@@ -287,9 +283,10 @@ public class MiClockView extends View {
     private void drawHourHand() {
         mCanvas.save();
 //        mCanvas.translate(mCanvasTranslateX * 1.2f, mCanvasTranslateY * 1.2f);
+        //利用 Canvas 的 rotate 方法移动指针位置
         mCanvas.rotate(mHourDegree, getWidth() / 2f, getHeight() / 2f);
 
-        //指针
+        //用 Path 绘制时针指针图标
         mHourHandPath.reset();
         float offset = mPaddingLeft + mTextRect.height() / 2f;
         mHourHandPath.moveTo(getWidth() / 2f - 0.018f * mRadius, getHeight() / 2f - 0.03f * mRadius);
@@ -317,9 +314,10 @@ public class MiClockView extends View {
     private void drawMinuteHand() {
         mCanvas.save();
 //        mCanvas.translate(mCanvasTranslateX * 2f, mCanvasTranslateY * 2f);
+        //利用 Canvas 的 rotate 方法移动指针位置
         mCanvas.rotate(mMinuteDegree, getWidth() / 2f, getHeight() / 2f);
 
-        //指针
+        //用 Path 绘制分针指针图标
         mMinuteHandPath.reset();
         float offset = mPaddingTop + mTextRect.height() / 2f;
         mMinuteHandPath.moveTo(getWidth() / 2f - 0.01f * mRadius, getHeight() / 2f - 0.03f * mRadius);
@@ -346,8 +344,10 @@ public class MiClockView extends View {
      */
     private void drawSecondHand() {
         mCanvas.save();
+        //利用 Canvas 的 rotate 方法移动指针位置
         mCanvas.rotate(mSecondDegree, getWidth() / 2f, getHeight() / 2f);
 
+        //用 Path 绘制秒针指针图标
         mSecondHandPath.reset();
         float offset = mPaddingTop + mTextRect.height() / 2f;
         mSecondHandPath.moveTo(getWidth() / 2f, offset + 0.26f * mRadius);
@@ -355,6 +355,7 @@ public class MiClockView extends View {
         mSecondHandPath.lineTo(getWidth() / 2f + 0.05f * mRadius, offset + 0.34f * mRadius);
         mSecondHandPath.close();
         mCanvas.drawPath(mSecondHandPath, mSecondHandPaint);
+
         mCanvas.restore();
     }
 }
