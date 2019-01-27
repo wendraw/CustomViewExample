@@ -1,2 +1,2 @@
 # CustomViewExample
-Learn custom views
+Learn View and ViewGroup and provide MiClock Demo.
